@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Laura.exe - Always On Call</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <canvas id="matrix-bg"></canvas>
+    
+    <div class="container">
+        <div class="header">
+            <h1>LAURA.EXE</h1>
+            <p style="color: #ff00ff;">STATUS: ALWAYS ON CALL 📱</p>
+            <p style="font-size: 12px; margin-top: 10px;">LOCATION: <span class="miami-badge">BRICKELL, MIAMI 🌴</span></p>
+        </div>
+        
+        <div class="phone-container">
+            <div class="other-guys-counter">Other Guys Online: <span id="other-guys">???</span></div>
+            
+            <div class="phone-screen">
+                <div class="status-bar">
+                    <span>📶 5G ULTRA</span>
+                    <span id="battery">🔋 2%</span>
+                    <span id="time">2:47 AM</span>
+                </div>
+                
+                <div class="decision-zone" id="decision-zone">
+                    <div class="question" id="question">
+                        Should I text you back right now or in 3-5 business days?
+                    </div>
+                    
+                    <div class="btn-container">
+                        <button class="decision-btn" onclick="makeDecision('now')">NOW PLZ</button>
+                        <button class="decision-btn" onclick="makeDecision('later')">WHENEVER</button>
+                    </div>
+                    
+                    <div style="margin-top: 30px; font-size: 12px; color: #ff00ff;">
+                        Laura is typing<span class="typing-indicator"><span></span><span></span><span></span></span>
+                    </div>
+                </div>
+                
+                <div class="notification" id="notification"></div>
+            </div>
+        </div>
+        
+        <div style="text-align: center; margin-top: 20px; font-size: 12px; color: #00ff00;">
+            <p>COMM_STYLE_ERROR: Your texts are too long/short/emoji-less/emoji-full</p>
+            <p style="margin-top: 10px;">⚠️ WARNING: Subject exhibits extreme indecisiveness ⚠️</p>
+        </div>
+    </div>
+    
+    <div class="shopify-ticker">
+        <div class="ticker-content">
+            💰 NEW SHOPIFY ORDER: Custom Print Merch +$127 💰 ANOTHER ORDER: Mystery Design +$89 💰 BRICKELL VIBES COLLECTION NOW LIVE 💰 
+        </div>
+    </div>
+    
+    <!-- Floating hack texts -->
+    <div class="hack-text" style="top: 20%; left: 10%;">if(laura.isOnPhone) return true; //always true</div>
+    <div class="hack-text" style="top: 70%; right: 15%;">console.log("still deciding...");</div>
+    <div class="hack-text" style="top: 40%; left: 80%;">miami.temperature = 85°F</div>
+    
+    <script src="script.js"></script>
+</body>
+</html> 
