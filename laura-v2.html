@@ -1,0 +1,1119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LauraOS v2.0 - System Status: Always Calling</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=VT323&family=Space+Mono:wght@400;700&family=Orbitron:wght@400;900&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"><text y="15" font-size="15">📱</text></svg>'), auto;
+        }
+        
+        body {
+            font-family: 'Space Mono', monospace;
+            background: #000;
+            color: #00ff00;
+            overflow-x: hidden;
+            min-height: 100vh;
+            position: relative;
+        }
+        
+        /* Animated background */
+        .cyber-grid {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(rgba(0, 255, 0, 0.1) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 255, 0, 0.1) 1px, transparent 1px);
+            background-size: 50px 50px;
+            animation: grid-move 10s linear infinite;
+            z-index: -2;
+        }
+        
+        @keyframes grid-move {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(50px, 50px); }
+        }
+        
+        /* Floating phones */
+        .floating-phone {
+            position: fixed;
+            font-size: 30px;
+            animation: float 15s infinite linear;
+            z-index: -1;
+            opacity: 0.2;
+        }
+        
+        @keyframes float {
+            0% { transform: translateX(-100px) translateY(100vh) rotate(0deg); }
+            100% { transform: translateX(calc(100vw + 100px)) translateY(-100px) rotate(360deg); }
+        }
+        
+        /* Navigation */
+        .nav-bar {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            border-bottom: 2px solid #00ff00;
+            z-index: 1000;
+            padding: 10px 0;
+        }
+        
+        .nav-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+        }
+        
+        .logo {
+            font-family: 'Orbitron', monospace;
+            font-size: 24px;
+            font-weight: 900;
+            background: linear-gradient(45deg, #00ff00, #ff00ff, #00ffff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: rgb-shift 3s infinite;
+        }
+        
+        @keyframes rgb-shift {
+            0%, 100% { filter: hue-rotate(0deg); }
+            50% { filter: hue-rotate(180deg); }
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 30px;
+            list-style: none;
+        }
+        
+        .nav-links a {
+            color: #00ff00;
+            text-decoration: none;
+            transition: all 0.3s;
+            position: relative;
+        }
+        
+        .nav-links a:hover {
+            color: #ff00ff;
+            text-shadow: 0 0 10px #ff00ff;
+        }
+        
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: #ff00ff;
+            transition: width 0.3s;
+        }
+        
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+        
+        /* Main content */
+        .main-container {
+            margin-top: 80px;
+            padding: 20px;
+            max-width: 1200px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        /* Hero Section */
+        .hero-section {
+            text-align: center;
+            padding: 60px 20px;
+            position: relative;
+        }
+        
+        .glitch-title {
+            font-size: 72px;
+            font-family: 'Orbitron', monospace;
+            font-weight: 900;
+            position: relative;
+            text-transform: uppercase;
+            animation: glitch 2s infinite;
+        }
+        
+        @keyframes glitch {
+            0%, 100% { 
+                text-shadow: 
+                    2px 2px #ff00ff, 
+                    -2px -2px #00ffff,
+                    0 0 30px rgba(0, 255, 0, 0.8);
+            }
+            25% { 
+                text-shadow: 
+                    -2px 2px #ff00ff, 
+                    2px -2px #00ffff,
+                    0 0 30px rgba(255, 0, 255, 0.8);
+            }
+            50% {
+                text-shadow: 
+                    2px -2px #ff00ff, 
+                    -2px 2px #00ffff,
+                    0 0 30px rgba(0, 255, 255, 0.8);
+            }
+        }
+        
+        .status-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-top: 40px;
+        }
+        
+        .status-card {
+            background: rgba(0, 255, 0, 0.1);
+            border: 2px solid #00ff00;
+            padding: 20px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s;
+        }
+        
+        .status-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 10px 30px rgba(0, 255, 0, 0.3);
+            background: rgba(0, 255, 0, 0.2);
+        }
+        
+        .status-card h3 {
+            color: #00ffff;
+            margin-bottom: 10px;
+        }
+        
+        .status-value {
+            font-size: 24px;
+            font-weight: bold;
+            color: #ff00ff;
+        }
+        
+        /* Phone Simulator Section */
+        .phone-simulator {
+            background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+            border: 3px solid #00ff00;
+            border-radius: 40px;
+            max-width: 400px;
+            margin: 40px auto;
+            padding: 20px;
+            position: relative;
+            box-shadow: 
+                0 0 50px rgba(0, 255, 0, 0.5),
+                inset 0 0 20px rgba(0, 255, 0, 0.2);
+        }
+        
+        .phone-header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        
+        .carrier-info {
+            font-size: 12px;
+            color: #00ffff;
+            animation: blink 2s infinite;
+        }
+        
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+        
+        .chat-interface {
+            background: #000;
+            border: 1px solid #00ff00;
+            border-radius: 20px;
+            padding: 20px;
+            height: 400px;
+            overflow-y: auto;
+            position: relative;
+        }
+        
+        .message {
+            margin: 10px 0;
+            padding: 10px 15px;
+            border-radius: 15px;
+            max-width: 80%;
+            animation: slideIn 0.3s;
+        }
+        
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .message.laura {
+            background: linear-gradient(135deg, #ff006e, #8338ec);
+            color: white;
+            margin-left: auto;
+            text-align: right;
+        }
+        
+        .message.you {
+            background: rgba(0, 255, 0, 0.2);
+            border: 1px solid #00ff00;
+        }
+        
+        .typing-bubble {
+            display: inline-flex;
+            align-items: center;
+            padding: 10px 15px;
+            background: rgba(255, 0, 255, 0.2);
+            border-radius: 20px;
+            margin: 10px 0;
+        }
+        
+        .typing-bubble span {
+            width: 8px;
+            height: 8px;
+            background: #ff00ff;
+            border-radius: 50%;
+            margin: 0 2px;
+            animation: typingDot 1.4s infinite;
+        }
+        
+        .typing-bubble span:nth-child(2) { animation-delay: 0.2s; }
+        .typing-bubble span:nth-child(3) { animation-delay: 0.4s; }
+        
+        @keyframes typingDot {
+            0%, 60%, 100% { transform: scale(1); opacity: 0.5; }
+            30% { transform: scale(1.5); opacity: 1; }
+        }
+        
+        /* Decision Game Section */
+        .decision-game {
+            background: rgba(255, 0, 255, 0.1);
+            border: 2px solid #ff00ff;
+            padding: 40px;
+            margin: 40px 0;
+            text-align: center;
+            position: relative;
+        }
+        
+        .decision-timer {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            font-size: 24px;
+            color: #ff0000;
+            font-weight: bold;
+        }
+        
+        .decision-question {
+            font-size: 24px;
+            color: #00ffff;
+            margin-bottom: 30px;
+            text-shadow: 0 0 20px rgba(0, 255, 255, 0.5);
+        }
+        
+        .choice-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 20px;
+            margin-top: 30px;
+        }
+        
+        .choice-btn {
+            background: transparent;
+            border: 2px solid #00ff00;
+            color: #00ff00;
+            padding: 20px;
+            font-family: inherit;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .choice-btn::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: rgba(0, 255, 0, 0.3);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+        
+        .choice-btn:hover::before {
+            width: 300px;
+            height: 300px;
+        }
+        
+        .choice-btn:hover {
+            color: #000;
+            background: #00ff00;
+            transform: scale(1.05);
+            box-shadow: 0 0 30px rgba(0, 255, 0, 0.8);
+        }
+        
+        /* Miami Section */
+        .miami-section {
+            background: linear-gradient(135deg, #ff006e 0%, #3a86ff 100%);
+            padding: 60px 20px;
+            margin: 40px -20px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .miami-section::before {
+            content: '🌴';
+            position: absolute;
+            font-size: 200px;
+            opacity: 0.1;
+            animation: sway 5s ease-in-out infinite;
+        }
+        
+        @keyframes sway {
+            0%, 100% { transform: rotate(-5deg); }
+            50% { transform: rotate(5deg); }
+        }
+        
+        .miami-content {
+            position: relative;
+            z-index: 1;
+            text-align: center;
+            color: white;
+        }
+        
+        .miami-title {
+            font-size: 48px;
+            font-family: 'Orbitron', monospace;
+            text-shadow: 0 0 30px rgba(255, 255, 255, 0.5);
+            margin-bottom: 20px;
+        }
+        
+        .brickell-map {
+            background: rgba(0, 0, 0, 0.5);
+            border: 2px solid white;
+            padding: 20px;
+            margin: 20px auto;
+            max-width: 600px;
+            border-radius: 10px;
+        }
+        
+        /* Shopify Dashboard */
+        .shopify-dashboard {
+            background: rgba(0, 255, 0, 0.05);
+            border: 2px solid #00ff00;
+            padding: 30px;
+            margin: 40px 0;
+        }
+        
+        .shopify-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+        
+        .revenue-counter {
+            font-size: 36px;
+            font-weight: bold;
+            color: #00ff00;
+            font-family: 'Orbitron', monospace;
+        }
+        
+        .order-list {
+            max-height: 300px;
+            overflow-y: auto;
+            border: 1px solid #00ff00;
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.5);
+        }
+        
+        .order-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid rgba(0, 255, 0, 0.3);
+            animation: slideIn 0.5s;
+        }
+        
+        .order-item:hover {
+            background: rgba(0, 255, 0, 0.1);
+            padding-left: 10px;
+            transition: all 0.3s;
+        }
+        
+        /* Communication Analysis */
+        .comm-analysis {
+            background: rgba(255, 0, 255, 0.05);
+            border: 2px solid #ff00ff;
+            padding: 40px;
+            margin: 40px 0;
+            text-align: center;
+        }
+        
+        .comm-meter {
+            width: 100%;
+            max-width: 500px;
+            height: 30px;
+            background: #1a1a1a;
+            border: 2px solid #ff00ff;
+            margin: 20px auto;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .comm-level {
+            height: 100%;
+            background: linear-gradient(90deg, #ff0000, #ffff00, #00ff00);
+            width: 15%;
+            transition: width 1s;
+            position: relative;
+        }
+        
+        .comm-label {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: white;
+            font-weight: bold;
+            z-index: 1;
+        }
+        
+        /* Notification Popup */
+        .notification-popup {
+            position: fixed;
+            top: 100px;
+            right: -400px;
+            width: 350px;
+            background: linear-gradient(135deg, #1a1a1a, #2d2d2d);
+            border: 2px solid #ff00ff;
+            border-radius: 10px;
+            padding: 20px;
+            transition: right 0.5s;
+            z-index: 2000;
+            box-shadow: 0 0 30px rgba(255, 0, 255, 0.5);
+        }
+        
+        .notification-popup.show {
+            right: 20px;
+        }
+        
+        .notif-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        
+        .notif-title {
+            color: #ff00ff;
+            font-weight: bold;
+        }
+        
+        .notif-close {
+            cursor: pointer;
+            color: #ff0000;
+            font-size: 20px;
+        }
+        
+        /* Bottom ticker */
+        .ticker-wrapper {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            background: linear-gradient(90deg, #00ff00, #ff00ff, #00ffff);
+            padding: 10px 0;
+            overflow: hidden;
+        }
+        
+        .ticker-content {
+            display: flex;
+            animation: ticker-scroll 30s linear infinite;
+            white-space: nowrap;
+        }
+        
+        @keyframes ticker-scroll {
+            0% { transform: translateX(100%); }
+            100% { transform: translateX(-100%); }
+        }
+        
+        .ticker-item {
+            padding: 0 50px;
+            color: #000;
+            font-weight: bold;
+            font-size: 14px;
+        }
+        
+        /* Secret menu */
+        .secret-menu {
+            position: fixed;
+            bottom: 60px;
+            right: 20px;
+            background: rgba(0, 0, 0, 0.9);
+            border: 2px solid #00ff00;
+            padding: 20px;
+            border-radius: 10px;
+            display: none;
+            z-index: 3000;
+        }
+        
+        .secret-menu.show {
+            display: block;
+            animation: fadeIn 0.5s;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.8); }
+            to { opacity: 1; transform: scale(1); }
+        }
+        
+        .secret-btn {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            margin: 5px 0;
+            background: transparent;
+            border: 1px solid #00ff00;
+            color: #00ff00;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .secret-btn:hover {
+            background: #00ff00;
+            color: #000;
+        }
+        
+        /* Loading screen */
+        .loading-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            flex-direction: column;
+        }
+        
+        .loading-text {
+            font-size: 24px;
+            color: #00ff00;
+            margin-bottom: 20px;
+            font-family: 'Orbitron', monospace;
+        }
+        
+        .loading-bar {
+            width: 300px;
+            height: 20px;
+            border: 2px solid #00ff00;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .loading-progress {
+            height: 100%;
+            background: #00ff00;
+            width: 0;
+            animation: load 2s forwards;
+        }
+        
+        @keyframes load {
+            to { width: 100%; }
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+            
+            .glitch-title {
+                font-size: 36px;
+            }
+            
+            .status-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Loading Screen -->
+    <div class="loading-screen" id="loadingScreen">
+        <div class="loading-text">LOADING LAURAOS v2.0...</div>
+        <div class="loading-bar">
+            <div class="loading-progress"></div>
+        </div>
+    </div>
+    
+    <!-- Animated Background -->
+    <div class="cyber-grid"></div>
+    
+    <!-- Floating phones -->
+    <div class="floating-phone" style="top: 10%; left: 5%; animation-delay: 0s;">📱</div>
+    <div class="floating-phone" style="top: 30%; left: 15%; animation-delay: 3s;">📞</div>
+    <div class="floating-phone" style="top: 50%; left: 25%; animation-delay: 6s;">📱</div>
+    <div class="floating-phone" style="top: 70%; left: 35%; animation-delay: 9s;">📲</div>
+    <div class="floating-phone" style="top: 20%; left: 85%; animation-delay: 12s;">☎️</div>
+    
+    <!-- Navigation -->
+    <nav class="nav-bar">
+        <div class="nav-content">
+            <div class="logo">LAURA.OS</div>
+            <ul class="nav-links">
+                <li><a href="#home">HOME</a></li>
+                <li><a href="#phone">PHONE STATUS</a></li>
+                <li><a href="#decisions">DECISIONS</a></li>
+                <li><a href="#miami">MIAMI LIFE</a></li>
+                <li><a href="#shopify">BUSINESS</a></li>
+                <li><a href="#comms">COMMS ANALYSIS</a></li>
+                <li><a href="index.html" style="color: #ff00ff; border: 1px solid #ff00ff; padding: 5px 10px; border-radius: 5px; transition: all 0.3s; background: transparent;" 
+                      onmouseover="this.style.background='#ff00ff'; this.style.color='#000';" 
+                      onmouseout="this.style.background='transparent'; this.style.color='#ff00ff';">← v1.0</a></li>
+            </ul>
+        </div>
+    </nav>
+    
+    <!-- Main Content -->
+    <div class="main-container">
+        <!-- Hero Section -->
+        <section id="home" class="hero-section">
+            <h1 class="glitch-title">LAURA.EXE</h1>
+            <p style="font-size: 20px; color: #ff00ff; margin-top: 20px;">
+                System Status: <span style="color: #00ff00;">PERPETUALLY ON CALL</span>
+            </p>
+            <div style="margin-top: 15px;">
+                <span style="color: #00ffff; font-size: 16px; border: 2px solid #00ffff; padding: 8px 16px; display: inline-block; background: rgba(0, 255, 255, 0.1); animation: rgb-shift 3s infinite;">
+                    VERSION 2.0 - ENHANCED EDITION
+                </span>
+            </div>
+            
+            <div class="status-grid">
+                <div class="status-card">
+                    <h3>Phone Battery</h3>
+                    <div class="status-value" id="batteryStatus">3%</div>
+                </div>
+                <div class="status-card">
+                    <h3>Active Calls</h3>
+                    <div class="status-value" id="activeCalls">7</div>
+                </div>
+                <div class="status-card">
+                    <h3>Other Guys™</h3>
+                    <div class="status-value" id="otherGuys">???</div>
+                </div>
+                <div class="status-card">
+                    <h3>Decisions Pending</h3>
+                    <div class="status-value" id="pendingDecisions">∞</div>
+                </div>
+                <div class="status-card">
+                    <h3>Text Response Time</h3>
+                    <div class="status-value" id="responseTime">3-5 days</div>
+                </div>
+                <div class="status-card">
+                    <h3>Miami Vibes</h3>
+                    <div class="status-value" id="miamiVibes">MAX</div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Phone Simulator -->
+        <section id="phone" class="phone-simulator">
+            <div class="phone-header">
+                <div class="carrier-info">📶 LAURA'S NETWORK • 5G ULTRA</div>
+                <div style="color: #ff0000; font-size: 12px;">⚠️ 47 MISSED TEXTS FROM YOU</div>
+            </div>
+            
+            <div class="chat-interface" id="chatInterface">
+                <div class="message laura">
+                    Sorry, was on the phone! What's up?
+                </div>
+                <div class="message you">
+                    Hey! Just wanted to check in...
+                </div>
+                <div class="message laura">
+                    Hold on, getting another call
+                </div>
+                <div class="typing-bubble">
+                    <span></span><span></span><span></span>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Decision Game -->
+        <section id="decisions" class="decision-game">
+            <div class="decision-timer" id="decisionTimer">⏰ 00:03</div>
+            <h2 style="font-size: 36px; color: #00ff00; margin-bottom: 20px;">DECISION SIMULATOR 3000</h2>
+            <div class="decision-question" id="decisionQuestion">
+                Should I answer your text now or after my 6th phone call today?
+            </div>
+            
+            <div class="choice-grid">
+                <button class="choice-btn" onclick="makeChoice('A')">Answer Now</button>
+                <button class="choice-btn" onclick="makeChoice('B')">After Call #6</button>
+                <button class="choice-btn" onclick="makeChoice('C')">Ask Other Guys</button>
+                <button class="choice-btn" onclick="makeChoice('D')">Can't Decide</button>
+            </div>
+            
+            <div style="margin-top: 30px; color: #ff00ff;">
+                <p>Decision History: <span id="decisionHistory">Still thinking...</span></p>
+            </div>
+        </section>
+        
+        <!-- Miami Section -->
+        <section id="miami" class="miami-section">
+            <div class="miami-content">
+                <h2 class="miami-title">BRICKELL LIFESTYLE ACTIVATED</h2>
+                <p style="font-size: 20px; margin-bottom: 30px;">
+                    Living that 305 life with endless brunch options and decisions
+                </p>
+                
+                <div class="brickell-map">
+                    <h3>Laura's Miami Hotspots:</h3>
+                    <p>☕ Overpriced Coffee Spots: <span style="color: #00ff00;">17 favorites</span></p>
+                    <p>🥐 Brunch Places: <span style="color: #00ff00;">Can't decide between 32</span></p>
+                    <p>🏢 Apartment Floor: <span style="color: #00ff00;">High enough to ignore your texts</span></p>
+                    <p>🌴 Beach Visits: <span style="color: #00ff00;">Too busy on phone</span></p>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Shopify Dashboard -->
+        <section id="shopify" class="shopify-dashboard">
+            <div class="shopify-header">
+                <h2 style="font-size: 32px; color: #00ff00;">SHOPIFY EMPIRE COMMAND CENTER</h2>
+                <div class="revenue-counter">$<span id="revenue">12,847</span></div>
+            </div>
+            
+            <div class="order-list" id="orderList">
+                <div class="order-item">
+                    <span>Custom Miami Vice Tee</span>
+                    <span style="color: #00ff00;">+$89</span>
+                </div>
+                <div class="order-item">
+                    <span>"Still Deciding" Hoodie</span>
+                    <span style="color: #00ff00;">+$127</span>
+                </div>
+                <div class="order-item">
+                    <span>"Other Guys" Mystery Box</span>
+                    <span style="color: #00ff00;">+$199</span>
+                </div>
+                <div class="order-item">
+                    <span>Phone Case (Always Ringing)</span>
+                    <span style="color: #00ff00;">+$47</span>
+                </div>
+            </div>
+            
+            <button class="choice-btn" style="margin-top: 20px;" onclick="addNewOrder()">
+                SIMULATE NEW ORDER 💰
+            </button>
+        </section>
+        
+        <!-- Communication Analysis -->
+        <section id="comms" class="comm-analysis">
+            <h2 style="font-size: 32px; color: #ff00ff; margin-bottom: 30px;">
+                COMMUNICATION COMPATIBILITY ANALYZER
+            </h2>
+            
+            <div class="comm-meter">
+                <div class="comm-level" id="commLevel"></div>
+                <div class="comm-label">15% COMPATIBLE</div>
+            </div>
+            
+            <div style="margin-top: 30px;">
+                <p style="color: #ff00ff; font-size: 18px;">Issues Detected:</p>
+                <p>❌ You use too many words</p>
+                <p>❌ Not enough emojis (or too many?)</p>
+                <p>❌ Response time under 3 days (too eager)</p>
+                <p>❌ You don't understand "other guys" concept</p>
+                <p>❌ Expecting consistent communication</p>
+            </div>
+            
+            <button class="choice-btn" style="margin-top: 20px;" onclick="recalculateComm()">
+                RECALCULATE (Results Won't Change)
+            </button>
+        </section>
+    </div>
+    
+    <!-- Notification Popup -->
+    <div class="notification-popup" id="notificationPopup">
+        <div class="notif-header">
+            <div class="notif-title">📱 INCOMING CALL</div>
+            <div class="notif-close" onclick="closeNotification()">×</div>
+        </div>
+        <p>From: <span id="callerName">Unknown Other Guy</span></p>
+        <p style="color: #00ff00; margin-top: 10px;">BRB, this might take 3 hours...</p>
+    </div>
+    
+    <!-- Bottom Ticker -->
+    <div class="ticker-wrapper">
+        <div class="ticker-content">
+            <span class="ticker-item">📱 CALL DURATION TODAY: 14H 37M</span>
+            <span class="ticker-item">💰 SHOPIFY SALES: +$3,847</span>
+            <span class="ticker-item">⏰ DECISIONS MADE: 0</span>
+            <span class="ticker-item">🌴 MIAMI TEMP: 85°F PERFECT</span>
+            <span class="ticker-item">💬 YOUR TEXTS: STILL UNREAD</span>
+            <span class="ticker-item">📞 OTHER GUYS WAITING: 17</span>
+        </div>
+    </div>
+    
+    <!-- Secret Menu -->
+    <div class="secret-menu" id="secretMenu">
+        <h3 style="color: #00ff00; margin-bottom: 10px;">SECRET LAURA MENU</h3>
+        <button class="secret-btn" onclick="activateMaxIndecision()">MAX INDECISION MODE</button>
+        <button class="secret-btn" onclick="callAllOtherGuys()">CALL ALL OTHER GUYS</button>
+        <button class="secret-btn" onclick="instantMiamiMode()">INSTANT MIAMI MODE</button>
+        <button class="secret-btn" onclick="shopifyMegaSale()">SHOPIFY MEGA SALE</button>
+    </div>
+    
+    <script>
+        // Remove loading screen
+        setTimeout(() => {
+            document.getElementById('loadingScreen').style.display = 'none';
+        }, 2000);
+        
+        // Update random statuses
+        function updateStatuses() {
+            document.getElementById('batteryStatus').textContent = Math.floor(Math.random() * 10 + 1) + '%';
+            document.getElementById('activeCalls').textContent = Math.floor(Math.random() * 10 + 3);
+            document.getElementById('otherGuys').textContent = Math.floor(Math.random() * 50 + 10);
+            document.getElementById('responseTime').textContent = (Math.floor(Math.random() * 5 + 3)) + '-' + (Math.floor(Math.random() * 3 + 5)) + ' days';
+        }
+        
+        setInterval(updateStatuses, 5000);
+        updateStatuses();
+        
+        // Chat simulator
+        const chatMessages = [
+            { type: 'laura', text: "Can't talk rn, on another call!" },
+            { type: 'you', text: "No worries, just wanted to say hi" },
+            { type: 'laura', text: "Actually wait, should I take this call or text you back?" },
+            { type: 'you', text: "Whatever works for you!" },
+            { type: 'laura', text: "I can't decide... let me ask my other guys" },
+            { type: 'laura', text: "JK! But seriously, calling someone else rn" },
+            { type: 'you', text: "Classic Laura 😄" },
+            { type: 'laura', text: "Stop using so many words! Also not enough emojis!! 😤📱✨" }
+        ];
+        
+        let messageIndex = 0;
+        function addChatMessage() {
+            if (messageIndex < chatMessages.length) {
+                const chat = document.getElementById('chatInterface');
+                const msg = chatMessages[messageIndex];
+                const msgDiv = document.createElement('div');
+                msgDiv.className = `message ${msg.type}`;
+                msgDiv.textContent = msg.text;
+                
+                // Remove typing indicator
+                const typing = chat.querySelector('.typing-bubble');
+                if (typing) typing.remove();
+                
+                chat.appendChild(msgDiv);
+                
+                // Add typing indicator back
+                if (messageIndex < chatMessages.length - 1) {
+                    const typingDiv = document.createElement('div');
+                    typingDiv.className = 'typing-bubble';
+                    typingDiv.innerHTML = '<span></span><span></span><span></span>';
+                    chat.appendChild(typingDiv);
+                }
+                
+                chat.scrollTop = chat.scrollHeight;
+                messageIndex++;
+            }
+        }
+        
+        setInterval(addChatMessage, 4000);
+        
+        // Decision timer
+        let decisionTime = 3;
+        let decisionInterval;
+        
+        function startDecisionTimer() {
+            decisionTime = 3;
+            clearInterval(decisionInterval);
+            decisionInterval = setInterval(() => {
+                document.getElementById('decisionTimer').textContent = `⏰ 00:0${decisionTime}`;
+                decisionTime--;
+                if (decisionTime < 0) {
+                    clearInterval(decisionInterval);
+                    document.getElementById('decisionTimer').textContent = '⏰ TIME\'S UP!';
+                    document.getElementById('decisionHistory').textContent = 'Still couldn\'t decide...';
+                    setTimeout(nextDecision, 2000);
+                }
+            }, 1000);
+        }
+        
+        const decisions = [
+            "Should I text back now or never?",
+            "Is 47 missed calls from the same person too many?",
+            "Brunch at 11am or 2pm? Or both?",
+            "Should I answer this call or the other 6 waiting?",
+            "Custom prints: Miami vibes or indecisive themes?",
+            "Reply with 3 emojis or 37?",
+            "Move to a higher floor in Brickell?",
+            "Should I explain what 'other guys' means?",
+            "Coffee date or another phone call?",
+            "Is my communication style perfect or just misunderstood?"
+        ];
+        
+        function nextDecision() {
+            const question = decisions[Math.floor(Math.random() * decisions.length)];
+            document.getElementById('decisionQuestion').textContent = question;
+            startDecisionTimer();
+        }
+        
+        function makeChoice(choice) {
+            clearInterval(decisionInterval);
+            const responses = [
+                "Interesting choice... but I need to think about it more",
+                "Let me call someone about this",
+                "Actually, can we revisit this in 3-5 business days?",
+                "Hold on, getting another call",
+                "I was just about to pick the other option!",
+                "This is why communication is so hard!"
+            ];
+            document.getElementById('decisionHistory').textContent = responses[Math.floor(Math.random() * responses.length)];
+            setTimeout(nextDecision, 3000);
+        }
+        
+        startDecisionTimer();
+        
+        // Shopify orders
+        const products = [
+            '"Phone Addiction" Tank Top',
+            '"Brickell Life" Tote Bag',
+            '"Can\'t Decide" Decision Dice',
+            '"Other Guys" Mystery Calendar',
+            '"3-5 Business Days" Planner',
+            '"Always On Call" Phone Case',
+            '"Miami Vibes Only" Sunglasses',
+            '"Indecisive AF" Sticker Pack'
+        ];
+        
+        function addNewOrder() {
+            const orderList = document.getElementById('orderList');
+            const product = products[Math.floor(Math.random() * products.length)];
+            const price = Math.floor(Math.random() * 150 + 50);
+            
+            const orderDiv = document.createElement('div');
+            orderDiv.className = 'order-item';
+            orderDiv.innerHTML = `
+                <span>${product}</span>
+                <span style="color: #00ff00;">+$${price}</span>
+            `;
+            
+            orderList.insertBefore(orderDiv, orderList.firstChild);
+            
+            // Update revenue
+            const currentRevenue = parseInt(document.getElementById('revenue').textContent.replace(',', ''));
+            document.getElementById('revenue').textContent = (currentRevenue + price).toLocaleString();
+            
+            // Keep list manageable
+            if (orderList.children.length > 10) {
+                orderList.removeChild(orderList.lastChild);
+            }
+        }
+        
+        // Auto-add orders
+        setInterval(addNewOrder, 8000);
+        
+        // Communication meter
+        function recalculateComm() {
+            const commLevel = document.getElementById('commLevel');
+            const newLevel = Math.floor(Math.random() * 20 + 10);
+            commLevel.style.width = newLevel + '%';
+            document.querySelector('.comm-label').textContent = newLevel + '% COMPATIBLE';
+            
+            setTimeout(() => {
+                commLevel.style.width = '15%';
+                document.querySelector('.comm-label').textContent = '15% COMPATIBLE';
+            }, 2000);
+        }
+        
+        // Notifications
+        function showNotification() {
+            const names = ['Mystery Caller', 'Other Guy #23', 'Brunch Friend', 'Shopify Support', 'Miami Bestie', 'Unknown Number', 'That One Guy'];
+            document.getElementById('callerName').textContent = names[Math.floor(Math.random() * names.length)];
+            document.getElementById('notificationPopup').classList.add('show');
+            
+            setTimeout(() => {
+                document.getElementById('notificationPopup').classList.remove('show');
+            }, 5000);
+        }
+        
+        setInterval(showNotification, 15000);
+        
+        function closeNotification() {
+            document.getElementById('notificationPopup').classList.remove('show');
+        }
+        
+        // Secret menu
+        let secretClicks = 0;
+        document.querySelector('.logo').addEventListener('click', () => {
+            secretClicks++;
+            if (secretClicks >= 5) {
+                document.getElementById('secretMenu').classList.toggle('show');
+                secretClicks = 0;
+            }
+        });
+        
+        // Secret menu functions
+        function activateMaxIndecision() {
+            alert('ERROR: Already at maximum indecision levels!');
+        }
+        
+        function callAllOtherGuys() {
+            alert('Calling all 47 other guys simultaneously... Phone exploded.');
+        }
+        
+        function instantMiamiMode() {
+            document.body.style.filter = 'hue-rotate(180deg) saturate(200%)';
+            setTimeout(() => {
+                document.body.style.filter = 'none';
+            }, 3000);
+        }
+        
+        function shopifyMegaSale() {
+            for (let i = 0; i < 10; i++) {
+                setTimeout(addNewOrder, i * 200);
+            }
+        }
+        
+        // Smooth scrolling
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+        
+        // Add random "Laura is typing" to console
+        setInterval(() => {
+            console.log('%cLaura is typing...', 'color: #ff00ff; font-size: 20px;');
+            setTimeout(() => {
+                console.log('%cNevermind, got another call', 'color: #00ff00; font-size: 16px;');
+            }, 2000);
+        }, 30000);
+    </script>
+</body>
+</html>
